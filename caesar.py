@@ -1,24 +1,22 @@
-alphabet = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
-# Второй алфавит нужен на случай если будем шифровать поледние буквы алфавита => Z - C при ключе шифрования 3
-encrypt = input("Введите слово для шифрования.")
-encrypted = ""
-for letter in encrypt:
-    position = alphabet.find(letter)
-    newPosition = position + 3
-    if letter in alphabet:
-        encrypted = encrypted + alphabet[newPosition]
-    else:
-        encrypted = encrypted + letter
-print(encrypted)
+def encrypt_caesar(plaintext: str) -> str:
+    ciphertext = ''
+    for char in plaintext:
+        key = ord(char)
+        if 97 <= key <= 122 or 65 <= key <= 90:
+            key += 3
+            if not (97 <= key <= 122 or 65 <= key <= 90):
+                key -= 26
+        ciphertext += chr(key)
+    return ciphertext
 
-alphabet = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
-decrypt = input("Введите слово для декодирования.")
-decrypted = ""
-for letter in decrypt:
-    position = alphabet.find(letter)
-    newPosition = position - 3
-    if letter in alphabet:
-        decrypted = decrypted + alphabet[newPosition]
-    else:
-        decrypted = decrypted + letter
-print(decrypted)
+
+def decrypt_caesar(ciphertext: str) -> str:
+    plaintext = ''
+    for char in ciphertext:
+        code = ord(char)
+        if 97 <= code <= 122 or 65 <= code <= 90:
+            code -= 3
+            if not (97 <= code <= 122 or 65 <= code <= 90):
+                code += 26
+        plaintext += chr(code)
+    return plaintext

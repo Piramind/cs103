@@ -1,4 +1,12 @@
 def encrypt_vigenere(plaintext: str, keyword: str) -> str:
+    """
+    >>> encrypt_vigenere("PYTHON", "A")
+    'PYTHON'
+    >>> encrypt_vigenere("python", "a")
+    'python'
+    >>> encrypt_vigenere("ATTACKATDAWN", "LEMON")
+    'LXFOPVEFRNHR'
+    """
     ciphertext = ''
     text_len = len(plaintext)
     key_len = len(keyword)
@@ -26,6 +34,14 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     return ciphertext
 
 def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
+    """
+    >>> decrypt_vigenere("PYTHON", "A")
+    'PYTHON'
+    >>> decrypt_vigenere("python", "a")
+    'python'
+    >>> decrypt_vigenere("LXFOPVEFRNHR", "LEMON")
+    'ATTACKATDAWN'
+    """
     plaintext = ''
     text_len = len(ciphertext)
     key_len = len(keyword)

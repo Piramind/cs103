@@ -145,3 +145,33 @@ def check_solution(solution: List[List[str]]) -> bool:
     return True
 
 
+def generate_sudoku(N: int) -> List[List[str]]:
+    """ Генерация судоку заполненного на N элементов
+    >>> grid = generate_sudoku(40)
+    >>> sum(1 for row in grid for e in row if e == '.')
+    41
+    >>> solution = solve(grid)
+    >>> check_solution(solution)
+    True
+    >>> grid = generate_sudoku(1000)
+    >>> sum(1 for row in grid for e in row if e == '.')
+    0
+    >>> solution = solve(grid)
+    >>> check_solution(solution)
+    True
+    >>> grid = generate_sudoku(0)
+    >>> sum(1 for row in grid for e in row if e == '.')
+    81
+    >>> solution = solve(grid)
+    >>> check_solution(solution)
+    True
+    """
+    grid = solve([['.'] * 9 for _ in range(9)])
+    N = 81 - min(81, max(0, N))
+    while N:
+        row = random.randint(0, 8)
+        col = random.randint(0, 8)
+        if grid[row][col] != '.':
+            grid[row][col] = '.' 
+            N -= 1
+    return grid

@@ -13,7 +13,6 @@ def read_sudoku(filename: str) -> List[List[str]]:
 def group(values: List[str], n: int) -> List[List[str]]:
     """
     Сгруппировать значения values в список, состоящий из списков по n элементов
-
     >>> group([1,2,3,4], 2)
     [[1, 2], [3, 4]]
     >>> group([1,2,3,4,5,6,7,8,9], 3)
@@ -22,9 +21,8 @@ def group(values: List[str], n: int) -> List[List[str]]:
     return [values[i:i+n] for i in range(0, len(values), n)]
 
 
-def get_row(grid: List[List[str]], position: Tuple[int, int]) -> List[str]:
+def get_row(grid: List[List[str]], pos: Tuple[int, int]) -> List[str]:
     """ Возвращает все значения для номера строки, указанной в pos
-
     >>> get_row([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']], (0, 0))
     ['1', '2', '.']
     >>> get_row([['1', '2', '3'], ['4', '.', '6'], ['7', '8', '9']], (1, 0))
@@ -32,13 +30,12 @@ def get_row(grid: List[List[str]], position: Tuple[int, int]) -> List[str]:
     >>> get_row([['1', '2', '3'], ['4', '5', '6'], ['.', '8', '9']], (2, 0))
     ['.', '8', '9']
     """
-    row = position
+    row = pos
     return grid[row]
 
 
-def get_col(grid: List[List[str]], position: Tuple[int, int]) -> List[str]:
+def get_col(grid: List[List[str]], pos: Tuple[int, int]) -> List[str]:
     """ Возвращает все значения для номера столбца, указанного в pos
-
     >>> get_col([['1', '2', '.'], ['4', '5', '6'], ['7', '8', '9']], (0, 0))
     ['1', '4', '7']
     >>> get_col([['1', '2', '3'], ['4', '.', '6'], ['7', '8', '9']], (0, 1))
@@ -46,11 +43,11 @@ def get_col(grid: List[List[str]], position: Tuple[int, int]) -> List[str]:
     >>> get_col([['1', '2', '3'], ['4', '5', '6'], ['.', '8', '9']], (0, 2))
     ['3', '6', '9']
     """
-    col = position
+    col = pos
     return [grid[row][col] for row in range(len(grid))]
 
 
-def get_block(grid: List[List[str]], position: Tuple[int, int]) -> List[str]:
+def get_block(grid: List[List[str]], pos: Tuple[int, int]) -> List[str]:
     """ Возвращает все значения из квадрата, в который попадает позиция pos
     >>> grid = read_sudoku('puzzle0.txt')
     >>> get_block(grid, (0, 1))
@@ -60,7 +57,7 @@ def get_block(grid: List[List[str]], position: Tuple[int, int]) -> List[str]:
     >>> get_block(grid, (8, 8))
     ['2', '8', '.', '.', '.', '5', '.', '7', '9']
     """
-    row, col = position
+    row, col = pos
     br = 3 * (row // 3)
     bc = 3 * (col // 3)
     return [grid[br+r][bc+c] for r in range(3) for c in range(3)]
@@ -82,7 +79,7 @@ def find_empty_positions(grid: List[List[str]]) -> Optional[Tuple[int, int]]:
     return None
 
 
-def find_possible_values(grid: List[List[str]], position: Tuple[int, int]) -> Set[str]:
+def find_possible_values(grid: List[List[str]], pos: Tuple[int, int]) -> Set[str]:
     """ Вернуть множество возможных значения для указанной позиции
     >>> grid = read_sudoku('puzzle0.txt')
     >>> values = find_possible_values(grid, (0,2))
@@ -93,9 +90,9 @@ def find_possible_values(grid: List[List[str]], position: Tuple[int, int]) -> Se
     True
     """
     return set('123456789') - \
-        set(get_row(grid, position)) - \
-        set(get_col(grid, position)) - \
-        set(get_block(grid, position))
+        set(get_row(grid, pos)) - \
+        set(get_col(grid, pos)) - \
+        set(get_block(grid, pos))
 
 
 def solve(grid: List[List[str]]) -> Optional[List[List[str]]]:
@@ -111,10 +108,10 @@ def solve(grid: List[List[str]]) -> Optional[List[List[str]]]:
     [['5', '3', '4', '6', '7', '8', '9', '1', '2'], ['6', '7', '2', '1', '9', '5', '3', '4', '8'], ['1', '9', '8', '3', '4', '2', '5', '6', '7'], ['8', '5', '9', '7', '6', '1', '4', '2', '3'], ['4', '2', '6', '8', '5', '3', '7', '9', '1'], ['7', '1', '3', '9', '2', '4', '8', '5', '6'], ['9', '6', '1', '5', '3', '7', '2', '8', '4'], ['2', '8', '7', '4', '1', '9', '6', '3', '5'], ['3', '4', '5', '2', '8', '6', '1', '7', '9']]
     """
     pos = find_empty_positions(grid)
-    if not position:
+    if not pos:
         return grid
-    row, col = position
-    for value in find_possible_values(grid, position):
+    row, col = pos
+    for value in find_possible_values(grid, pos):
         grid[row][col] = value
         solution = solve(grid)
         if solution:
@@ -125,7 +122,6 @@ def solve(grid: List[List[str]]) -> Optional[List[List[str]]]:
 
 def check_solution(solution: List[List[str]]) -> bool:
     """ Если решение solution верно, то вернуть True, в противном случае False """
-    # TODO: Add doctests with bad puzzles
     for row in range(len(solution)):
         row_values = set(get_row(solution, (row, 0)))
         if row_values != set('123456789'):

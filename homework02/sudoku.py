@@ -52,7 +52,7 @@ def get_col(grid: List[List[str]], position: Tuple[int, int]) -> List[str]:
 
 def get_block(grid: List[List[str]], position: Tuple[int, int]) -> List[str]:
     """ Возвращает все значения из квадрата, в который попадает позиция pos
-    >>> grid = read_sudoku('puzzle1.txt')
+    >>> grid = read_sudoku('puzzle0.txt')
     >>> get_block(grid, (0, 1))
     ['5', '3', '.', '6', '.', '.', '.', '9', '8']
     >>> get_block(grid, (4, 7))
@@ -84,7 +84,7 @@ def find_empty_positions(grid: List[List[str]]) -> Optional[Tuple[int, int]]:
 
 def find_possible_values(grid: List[List[str]], position: Tuple[int, int]) -> Set[str]:
     """ Вернуть множество возможных значения для указанной позиции
-    >>> grid = read_sudoku('puzzle1.txt')
+    >>> grid = read_sudoku('puzzle0.txt')
     >>> values = find_possible_values(grid, (0,2))
     >>> values == {'1', '2', '4'}
     True
@@ -106,7 +106,7 @@ def solve(grid: List[List[str]]) -> Optional[List[List[str]]]:
         3. Для каждого возможного значения:
             3.1. Поместить это значение на эту позицию
             3.2. Продолжить решать оставшуюся часть пазла
-    >>> grid = read_sudoku('puzzle1.txt')
+    >>> grid = read_sudoku('puzzle0.txt')
     >>> solve(grid)
     [['5', '3', '4', '6', '7', '8', '9', '1', '2'], ['6', '7', '2', '1', '9', '5', '3', '4', '8'], ['1', '9', '8', '3', '4', '2', '5', '6', '7'], ['8', '5', '9', '7', '6', '1', '4', '2', '3'], ['4', '2', '6', '8', '5', '3', '7', '9', '1'], ['7', '1', '3', '9', '2', '4', '8', '5', '6'], ['9', '6', '1', '5', '3', '7', '2', '8', '4'], ['2', '8', '7', '4', '1', '9', '6', '3', '5'], ['3', '4', '5', '2', '8', '6', '1', '7', '9']]
     """

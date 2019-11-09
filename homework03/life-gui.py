@@ -2,7 +2,14 @@ import pygame
 from pygame.locals import *
 
 from life import GameOfLife
-from ui import UI
+
+class UI(abc.ABC):
+    def __init__(self, life: GameOfLife):
+        self.life = life
+
+    @abc.abstractmethod
+    def run(self):
+        pass
 
 
 class GUI(UI):

@@ -1,6 +1,7 @@
 import curses
 import time
 import pygame
+import abc
 
 from life import GameOfLife
 class UI(abc.ABC):

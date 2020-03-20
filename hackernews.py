@@ -1,10 +1,9 @@
-from bottle import (
-    route, run, template, request, redirect, TEMPLATE_PATH
-)
-from homework06.db import News, session
-from homework06.scraputils import get_news
-from homework06.bayes import NaiveBayesClassifier
-from homework06.bayes import  clean
+from bottle import*
+from db import News, session
+from scraputils import get_news
+from bayes import NaiveBayesClassifier
+from bayes import  clean
+import string
 
 
 @route("/news")
@@ -23,7 +22,6 @@ def add_label():
     entry = s.query(News).get(id)
     # 3. Изменить значение метки записи на значение label
     entry.label = label
-    # 4. Сохранить результат в БД
     s.commit()
     redirect("/news")
 
@@ -44,29 +42,33 @@ def update_news():
             s.commit()
     redirect('/news')
 
-@route('/rec')
-def recommendations():
+@route("/classify")
+def classify_news():
+    X, y, info = [], [], []
     s = session()
-    labeled = s.query(News).filter(News.label != None).all() #новости, которые разметили
-    news_title = [news.title for news in labeled]
-    news_label = [news.label for news in labeled]
-    bayes = NaiveBayesClassifier() #пропускаем данные через наивный классификатор
-    bayes.fit(news_title, news_label)
-    notlabeled = s.query(News).filter(News.label == None).all() #новости, которые не разметили
-    new_news_title = [news.title for news in notlabeled]
-    new_news_label = bayes.predict(new_news_title)
-    good_news, maybe_news, never_news = [], [], []
-    #Добавляем метки нерзамечанным новостям
-    for id, label in enumerate(new_news_label):
-        if label == 'good':
-            good_news.append(notlabeled[id])
-        elif label == 'maybe':
-            maybe_news.append(notlabeled[id])
-        elif label == 'never':
-            never_news.append(notlabeled[id])
-    classified_news = [good_news, maybe_news, never_news]
-    return template('news_ranked', good_news=good_news, maybe_news=maybe_news, never_news=never_news)
+    for i in range(1001):
+        for item in s.query(News).filter(News.id == i).all():
+            X.append(item.title)
+            y.append(item.label)
+    X_test = []
+    for i in range(1001, len(s.query(News).all()) + 1):
+        for item in s.query(News).filter(News.id == i).all():
+            X_test.append(item.title)
+            info.append(News(author=item.author,
+                             points=item.points,
+                             comments=item.comments,
+                             url=item.url))
+    X = [x.translate(str.maketrans("", "", string.punctuation)).lower() for x in X]
+    X_cleared = [x.translate(str.maketrans("", "", string.punctuation)).lower() for x in X_test]
+    model = NaiveBayesClassifier(alpha=0.01)
+    model.fit(X, y)
+    predicted_news = model.predict(X_cleared)
+    classified_news = []
+    for i in range(len(predicted_news)-1):
+        classified_news.append([y[i-1], X_test[i-1], info[i-1]])
+    classified_news = sorted(classified_news, key=lambda item: item[0])
+    return template('news_recommendations', rows=classified_news)
 
 
 if __name__ == "__main__":
-    run(host="localhost", port=8080)
+    run(host="localhost", port=6080, reloader=True)

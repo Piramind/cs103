@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import datetime
 import time
 
-access_token = '952672295:AAF4aqUSI5s0lPNkrDw1KkYvxm-cf3VpP38'
+access_token = ''
 telebot.apihelper.proxy = {'https': 'https://149.56.106.104:3128'}
 bot = telebot.TeleBot(access_token)
 

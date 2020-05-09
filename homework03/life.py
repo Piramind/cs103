@@ -1,7 +1,9 @@
 import pathlib
 import random
+from copy import copy
 
 from typing import List, Optional, Tuple
+from pprint import pprint
 
 Cell = Tuple[int, int]
 Cells = List[int]
@@ -66,9 +68,8 @@ class GameOfLife:
 
 
     def get_next_generation(self) -> Grid:
-        for i in range(self.rows):
-            for j in range(self.cols):
-                self.prev_generation[i][j] = self.curr_generation[i][j]
+        
+        new_generation = copy(self.curr_generation)
 
         alive = []
         dead = []
@@ -82,10 +83,10 @@ class GameOfLife:
                     alive.append((i, j))
 
         for t in alive:
-            self.curr_generation[t[0]][t[1]] = 1
+            new_generation[t[0]][t[1]] = 1
         for t in dead:
-            self.curr_generation[t[0]][t[1]] = 0
-        return self.curr_generation
+            new_generation[t[0]][t[1]] = 0
+        return new_generation
 
 
 
@@ -93,7 +94,15 @@ class GameOfLife:
         """
         Выполнить один шаг игры.
         """
-        self.get_next_generation()
+        self.prev_generation = list()
+        for row in self.curr_generation:
+            self.prev_generation.append(row)
+        print('PREV')
+        pprint(self.prev_generation)
+        self.curr_generation = self.get_next_generation()
+        print('CURR')
+        pprint(self.curr_generation)
+        print(self.is_changing)
         self.generations += 1
 
 
@@ -110,12 +119,11 @@ class GameOfLife:
         """
         Изменилось ли состояние клеток с предыдущего шага.
         """
-        for i in range(self.rows):
-            for j in range(self.cols):
-                if self.prev_generation[i][j] != self.curr_generation[i][j]:
-                    return True
-        return False
-
+        print('TEST_PREV')
+        pprint(self.prev_generation)
+        print('TEST_CURR')
+        pprint(self.curr_generation)
+        return self.prev_generation != self.curr_generation
 
     @staticmethod
     def from_file(filename: pathlib.Path) -> 'GameOfLife':

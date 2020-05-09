@@ -9,10 +9,9 @@ def is_prime(num: int) -> bool:
 
 
 def gcd(a: int, b: int) -> int:
-    for i in range(a - 1, 1, -1):
-        for j in range(b - 1, i - 1, -1):
-            if i == j and a % i == 0 and b % i == 0:
-                return i
+     while b:
+        a, b = b, a % b
+     return a
 
 
 def multiplicative_inverse(e: int, phi: int) -> int:
@@ -49,3 +48,5 @@ def generate_keypair(p: int, q: int) -> ((int, int), (int, int)):
 
     d = multiplicative_inverse(e, phi)
     return (e, n), (d, n)
+    print(int.count(d,n))
+    print(p, q)

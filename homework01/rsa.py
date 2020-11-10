@@ -2,6 +2,14 @@ import random
 
 
 def is_prime(num: int) -> bool:
+    """
+    >>> is_prime(2)
+    True
+    >>> is_prime(11)
+    True
+    >>> is_prime(8)
+    False
+    """
     for i in range(2, num):
         if num % i == 0:
             return False
@@ -15,6 +23,10 @@ def gcd(a: int, b: int) -> int:
 
 
 def multiplicative_inverse(e: int, phi: int) -> int:
+    """
+    >>> multiplicative_inverse(7, 40)
+    23
+    """
     div = []
     rows = 0
     phi_temp = phi
@@ -48,5 +60,3 @@ def generate_keypair(p: int, q: int) -> ((int, int), (int, int)):
 
     d = multiplicative_inverse(e, phi)
     return (e, n), (d, n)
-    print(int.count(d,n))
-    print(p, q)

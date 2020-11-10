@@ -125,6 +125,7 @@ class TestGameOfLife(unittest.TestCase):
         self.assertTrue(game.is_max_generations_exceeded)
 
     def test_is_changing(self):
+        print('\n\n\n BEGIN TEST')
         game = GameOfLife((self.rows, self.cols))
         game.curr_generation = self.grid
         game.step()

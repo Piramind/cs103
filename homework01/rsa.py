@@ -17,12 +17,6 @@ def is_prime(num: int) -> bool:
 
 
 def gcd(a: int, b: int) -> int:
-    """
-    >>> gcd(12, 15)
-    3
-    >>> gcd(3, 7)
-    1
-    """
      while b:
         a, b = b, a % b
      return a
